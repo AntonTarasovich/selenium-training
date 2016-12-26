@@ -8,7 +8,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
 public class LoginTest extends TestBase{
 
-    //@Test
+    @Test
     public void myFirstTest() {
         adminLogin();
         wait.until(titleIs("My Store"));

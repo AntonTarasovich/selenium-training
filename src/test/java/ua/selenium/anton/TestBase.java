@@ -38,6 +38,10 @@ public class TestBase {
         driver.findElement(By.name("login")).click();
     }
 
+    public void goToMainPage() {
+        driver.navigate().to("http://localhost/litecart/");
+    }
+
     boolean isElementPresent(By locator) {
         try {
             driver.findElement(locator);
