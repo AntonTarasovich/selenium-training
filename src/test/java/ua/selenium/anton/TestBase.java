@@ -42,6 +42,10 @@ public class TestBase {
         driver.navigate().to("http://localhost/litecart/admin/?app=countries&doc=countries");
     }
 
+    public void goToGeoZonesPage() {
+        driver.navigate().to("http://localhost/litecart/admin/?app=geo_zones&doc=geo_zones");
+    }
+
     boolean isElementPresent(By locator) {
         try {
             driver.findElement(locator);

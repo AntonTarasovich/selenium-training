@@ -32,12 +32,19 @@ public class CountriesTests extends TestBase{
         return zones;
     }
 
-    public ArrayList<String> getCountriesWithZonesLinks() {
-        List<WebElement> rows = driver.findElements(By.xpath(".//*[@class='row']"));
+    public ArrayList<String> getZonesListFromGeoZones() {
+        ArrayList<String> zones = new ArrayList<String>();
+        List<WebElement> allZones = driver.findElements(By.xpath(".//*[@id='table-zones']//td[3]/select"));
+        zones.addAll(allZones.stream().map(WebElement::getText).collect(Collectors.toList()));
+        return zones;
+    }
+
+    public ArrayList<String> getCountriesWithZonesLinks(By tableLocator, By countLocator, By linkLocator) {
+        List<WebElement> rows = driver.findElements(tableLocator);
         ArrayList<String> links = new ArrayList<String>();
         for (WebElement row : rows) {
-            if ((Integer.valueOf(row.findElement(By.xpath(".//td[6]")).getText()) > 0)) {
-                String link = row.findElement(By.xpath(".//td[5]/a")).getAttribute("href");
+            if ((Integer.valueOf(row.findElement(countLocator).getText()) > 0)) {
+                String link = row.findElement(linkLocator).getAttribute("href");
                 links.add(link);
             }
         }
@@ -70,11 +77,24 @@ public class CountriesTests extends TestBase{
     @Test
     public void alphabeticalOrderOfZonesTest() {
         goToCountriesPage();
-        ArrayList<String> links = getCountriesWithZonesLinks();
+        ArrayList<String> links = getCountriesWithZonesLinks(By.xpath(".//*[@class='row']"), By.xpath(".//td[6]"), By.xpath(".//td[5]/a"));
         for (String link : links) {
             driver.get(link);
             ArrayList<String> zonesFromSite = getZonesList();
             ArrayList<String> zonesToBeSorted = getZonesList();
+            sort(zonesToBeSorted);
+            assertTrue(compareLists(zonesFromSite, zonesToBeSorted));
+        }
+    }
+
+    @Test
+    public void alphabeticalOrderOfGeoZonesTest() {
+        goToGeoZonesPage();
+        ArrayList<String> links = getCountriesWithZonesLinks(By.xpath(".//*[@class='row']"), By.xpath(".//td[4]"), By.xpath(".//td[3]/a"));
+        for (String link : links) {
+            driver.get(link);
+            ArrayList<String> zonesFromSite = getZonesListFromGeoZones();
+            ArrayList<String> zonesToBeSorted = getZonesListFromGeoZones();
             sort(zonesToBeSorted);
             assertTrue(compareLists(zonesFromSite, zonesToBeSorted));
         }
