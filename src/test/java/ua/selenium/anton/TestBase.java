@@ -2,13 +2,9 @@ package ua.selenium.anton;
 
 import org.junit.After;
 import org.junit.Before;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
 public class TestBase {
 
@@ -42,10 +38,16 @@ public class TestBase {
         driver.navigate().to("http://localhost/litecart/");
     }
 
+    public void goToCountriesPage() {
+        driver.navigate().to("http://localhost/litecart/admin/?app=countries&doc=countries");
+    }
+
     boolean isElementPresent(By locator) {
         try {
             driver.findElement(locator);
             return true;
+        } catch (InvalidSelectorException ex) {
+            throw ex;
         } catch (NoSuchElementException ex) {
             return false;
         }
