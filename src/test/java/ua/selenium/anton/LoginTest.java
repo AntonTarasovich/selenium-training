@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static org.junit.Assert.assertTrue;
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.textToBePresentInElement;
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
 public class LoginTest extends TestBase{
@@ -135,5 +137,32 @@ public class LoginTest extends TestBase{
         assertTrue(isElementPresent(By.tagName("h1")));
         driver.findElement(By.cssSelector("#doc-vqmods")).click();
         assertTrue(isElementPresent(By.tagName("h1")));
+    }
+
+    @Test
+    public void userRegistrationTest() {
+        String mail = generateMail();
+        String password = "123456";
+        String firstName = "Vasya";
+        String lastName = "Pupkin";
+        goToMainPage();
+        driver.findElement(By.cssSelector("#box-account-login a")).click();
+        driver.findElement(By.name("firstname")).sendKeys(firstName);
+        driver.findElement(By.name("lastname")).sendKeys(lastName);
+        driver.findElement(By.name("address1")).sendKeys("Mayakovskogo str., 14");
+        driver.findElement(By.name("postcode")).sendKeys("04881");
+        driver.findElement(By.name("city")).sendKeys("Kiev");
+        driver.findElement(By.name("email")).sendKeys(mail);
+        driver.findElement(By.name("phone")).sendKeys("+380445555555");
+        driver.findElement(By.name("newsletter")).click();
+        driver.findElement(By.name("password")).sendKeys(password);
+        driver.findElement(By.name("confirmed_password")).sendKeys(password);
+        driver.findElement(By.name("create_account")).click();
+        driver.findElement(By.xpath(".//*[@id='box-account']//li[4]/a")).click();
+        driver.findElement(By.name("email")).sendKeys(mail);
+        driver.findElement(By.name("password")).sendKeys(password);
+        driver.findElement(By.name("login")).click();
+        assertTrue(driver.findElement(By.cssSelector("#notices>div")).getText().equals("You are now logged in as "
+                + firstName + " " + lastName +"."));
     }
 }

@@ -6,6 +6,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Date;
+
 public class TestBase {
 
     public WebDriver driver;
@@ -44,6 +46,12 @@ public class TestBase {
 
     public void goToGeoZonesPage() {
         driver.navigate().to("http://localhost/litecart/admin/?app=geo_zones&doc=geo_zones");
+    }
+
+    public String generateMail() {
+        Long date = new Date().getTime();
+        String mail = "vasya" + date + "@mail.ru";
+        return mail;
     }
 
     boolean isElementPresent(By locator) {
