@@ -8,7 +8,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElemen
 import static org.openqa.selenium.support.ui.ExpectedConditions.textToBePresentInElement;
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
-public class LoginTest extends TestBase{
+public class LoginTests extends TestBase{
 
     @Test
     public void myFirstTest() {
