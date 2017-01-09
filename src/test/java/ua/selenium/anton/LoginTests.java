@@ -4,8 +4,6 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 
 import static org.junit.Assert.assertTrue;
-import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
-import static org.openqa.selenium.support.ui.ExpectedConditions.textToBePresentInElement;
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
 public class LoginTests extends TestBase{

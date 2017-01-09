@@ -6,7 +6,10 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TestBase {
 
@@ -52,6 +55,18 @@ public class TestBase {
         Long date = new Date().getTime();
         String mail = "vasya" + date + "@mail.ru";
         return mail;
+    }
+
+    public ArrayList<String> getGoodsNames() {
+        List<WebElement> elements = driver.findElements(By.xpath(".//*[@class='row']//td[3]/a"));
+        ArrayList<String> goodsNames = elements.stream().map(WebElement::getText).collect(Collectors.toCollection(ArrayList::new));
+        return goodsNames;
+    }
+
+    public String generateGoodsName() {
+        Long date = new Date().getTime();
+        String goodsName = "Batman" + date;
+        return goodsName;
     }
 
     boolean isElementPresent(By locator) {

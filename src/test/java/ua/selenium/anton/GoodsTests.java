@@ -3,10 +3,11 @@ package ua.selenium.anton;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
+
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
-import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
 public class GoodsTests extends TestBase{
 
@@ -44,5 +45,36 @@ public class GoodsTests extends TestBase{
         assertTrue(mainDuckName.equals(pageDuckName));
         assertTrue(mainFullPrice.equals(pageFullPrice));
         assertTrue(mainDiscountPrice.equals(pageDiscountPrice));
+    }
+
+    @Test
+    public void newGoodsAddTest() {
+        String goodsName = generateGoodsName();
+        adminLogin();
+        driver.findElement(By.xpath(".//*[@id='app-'][2]")).click();
+        driver.findElement(By.xpath(".//*[@id='content']//a[2]")).click();
+        driver.findElement(By.xpath(".//*[@id='tab-general']//label[1]")).click();
+        driver.findElement(By.name("name[en]")).sendKeys(goodsName);
+        driver.findElement(By.name("code")).sendKeys("12345");
+        driver.findElement(By.cssSelector("input[value='1-3']")).click();
+        driver.findElement(By.name("quantity")).clear();
+        driver.findElement(By.name("quantity")).sendKeys("1000");
+        driver.findElement(By.name("new_images[]")).sendKeys("D:\\batman.png");
+        driver.findElement(By.name("date_valid_from")).sendKeys("2017-01-09");
+        driver.findElement(By.name("date_valid_to")).sendKeys("2018-01-09");
+        driver.findElement(By.xpath(".//*[@class='tabs']//li[2]")).click();
+        Select goodsManufacturer = new Select(driver.findElement(By.name("manufacturer_id")));
+        goodsManufacturer.selectByIndex(1);
+        driver.findElement(By.name("short_description[en]")).sendKeys("goodsName");
+        driver.findElement(By.name("description[en]")).sendKeys("Darker than night!");
+        driver.findElement(By.name("head_title[en]")).sendKeys("BATMAN!!!");
+        driver.findElement(By.xpath(".//*[@class='tabs']//li[4]")).click();
+        driver.findElement(By.name("purchase_price")).clear();
+        driver.findElement(By.name("purchase_price")).sendKeys("1");
+        Select price = new Select(driver.findElement(By.name("purchase_price_currency_code")));
+        price.selectByIndex(1);
+        driver.findElement(By.name("prices[USD]")).sendKeys("10000");
+        driver.findElement(By.name("save")).click();
+        assertTrue(getGoodsNames().contains(goodsName));
     }
 }
