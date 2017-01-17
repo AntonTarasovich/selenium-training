@@ -3,11 +3,14 @@ package ua.selenium.anton;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
+import static org.openqa.selenium.support.ui.ExpectedConditions.stalenessOf;
+import static org.openqa.selenium.support.ui.ExpectedConditions.textToBe;
 
 public class GoodsTests extends TestBase{
 
@@ -76,5 +79,13 @@ public class GoodsTests extends TestBase{
         driver.findElement(By.name("prices[USD]")).sendKeys("10000");
         driver.findElement(By.name("save")).click();
         assertTrue(getGoodsNames().contains(goodsName));
+    }
+
+    @Test
+    public void deleteGoodsFromBagTest() {
+        addGoodsToBag(3);
+        goToCheckout();
+        deleteAllGoodsFromBag();
+        assertTrue((driver.findElement(By.tagName("em")).getText()).equals("There are no items in your cart."));
     }
 }
