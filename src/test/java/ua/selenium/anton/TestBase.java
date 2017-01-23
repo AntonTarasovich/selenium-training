@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -122,5 +123,22 @@ public class TestBase {
         finally {
             driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         }
+    }
+
+    public String newWindowId(String oldWindow) throws InterruptedException {
+        String newWindow = "";
+        while (driver.getWindowHandles().size() == 1) {
+            Thread.sleep(500);
+        }
+        for (String window : driver.getWindowHandles()) {
+            if (! window.equals(oldWindow)) {
+                newWindow = window;
+            }
+        }
+        return newWindow;
+    }
+
+    public boolean isNewWindowOpened(Set<String> windows) {
+        return windows.size() > 1;
     }
 }

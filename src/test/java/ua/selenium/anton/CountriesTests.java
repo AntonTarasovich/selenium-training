@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import static org.junit.Assert.assertTrue;
 import static java.util.Collections.*;
@@ -97,6 +98,23 @@ public class CountriesTests extends TestBase{
             ArrayList<String> zonesToBeSorted = getZonesListFromGeoZones();
             sort(zonesToBeSorted);
             assertTrue(compareLists(zonesFromSite, zonesToBeSorted));
+        }
+    }
+
+    @Test
+    public void countriesEditingInNewPageTest() throws InterruptedException {
+        goToCountriesPage();
+        driver.findElement(By.className("fa-pencil")).click();
+        List<WebElement> externalLinks = driver.findElements(By.className("fa-external-link"));
+        for (WebElement externalLink : externalLinks) {
+            String mainWindow = driver.getWindowHandle();
+            externalLink.click();
+            String newWindow = newWindowId(mainWindow);
+            Set<String> newWindows = driver.getWindowHandles();
+            assertTrue(isNewWindowOpened(newWindows));
+            driver.switchTo().window(newWindow);
+            driver.close();
+            driver.switchTo().window(mainWindow);
         }
     }
 }
