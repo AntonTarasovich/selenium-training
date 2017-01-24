@@ -3,9 +3,12 @@ package ua.selenium.anton;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
@@ -84,5 +87,22 @@ public class GoodsTests extends TestBase{
         goToCheckout();
         deleteAllGoodsFromBag();
         assertTrue((driver.findElement(By.tagName("em")).getText()).equals("There are no items in your cart."));
+    }
+
+    @Test
+    public void getLogsOnGoodsPages() throws InterruptedException {
+        adminLogin();
+        goToCatalogPage();
+        List<WebElement> goods = driver.findElements(By.xpath(".//*[@id='content']//td[3]/a"));
+        for (WebElement good : goods) {
+            String mainWindow = driver.getWindowHandle();
+            String url = good.getAttribute("href");
+            driver.executeScript("window.open(arguments[0])", url);
+            String newWindow = newWindowId(mainWindow);
+            driver.switchTo().window(newWindow);
+            driver.manage().logs().get("browser").forEach(System.out::println);
+            driver.close();
+            driver.switchTo().window(mainWindow);
+        }
     }
 }

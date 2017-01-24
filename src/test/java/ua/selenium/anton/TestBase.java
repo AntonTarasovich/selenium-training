@@ -1,12 +1,17 @@
 package ua.selenium.anton;
 
+import com.google.common.io.Files;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,15 +24,41 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.textToBe;
 
 public class TestBase {
 
-    public WebDriver driver;
+    public EventFiringWebDriver driver;
     public WebDriverWait wait;
+
+    public static class MyListener extends AbstractWebDriverEventListener {
+        @Override
+        public void beforeFindBy(By by, WebElement element, WebDriver driver) {
+            System.out.println(by);
+        }
+
+        @Override
+        public void afterFindBy(By by, WebElement element, WebDriver driver) {
+            System.out.println(by + " found");
+        }
+
+        @Override
+        public void onException(Throwable throwable, WebDriver driver) {
+            System.out.println(throwable);
+            File tempFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+            File screen = new File("screen" + System.currentTimeMillis() + ".png");
+            try {
+                Files.copy(tempFile, screen);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println(screen);
+        }
+    }
 
     @Before
     public void start() {
         if (driver != null) {
             return;
         }
-        driver = new ChromeDriver();
+        driver = new EventFiringWebDriver(new ChromeDriver());
+        driver.register(new MyListener());
         wait = new WebDriverWait(driver, 10);
         return;
     }
@@ -47,6 +78,10 @@ public class TestBase {
 
     public void goToMainPage() {
         driver.navigate().to("http://localhost/litecart/");
+    }
+
+    public void goToCatalogPage() {
+        driver.navigate().to("http://localhost/litecart/admin/?app=catalog&doc=catalog&category_id=2");
     }
 
     public void goToCountriesPage() {
